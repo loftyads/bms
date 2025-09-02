@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLINDMAILS</title>
+    <link rel="shortcut icon" href="image copy/BMS (1).png" type="image/x-icon">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Reset and Basic Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            background-color: #e6de87; /* Specific background color from user's last snippet */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            display: flex;
+            flex-direction: column; /* Stack form and footer vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            padding: 20px; /* Overall padding for the body */
+        }
+
+        /* Message Form - now also acting as the main white box */
+        .message-form {
+            width: 100%; /* Take full width within its flex container */
+            max-width: 1200px; /* Reverted to old gig size for main white box */
+            min-height: 600px; /* Reverted to old gig size for main white box */
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem; /* Reverted to old gig size for main white box */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Reverted to old gig size for main white box */
+            display: flex;
+            flex-direction: column; /* Stack hero, form content, and footer vertically */
+            justify-content: space-between; /* Distribute space between sections */
+            align-items: center; /* Center content horizontally */
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 30px; /* Add margin to separate from global footer */
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 0.5rem 0 1rem;
+            margin-bottom: .24rem; /* Adjusted for overall form layout */
+            max-width: 500px; /* Limit hero section width for readability */
+            width: 100%;
+        }
+
+        .icon-container {
+            margin: -0.5rem 0 0.25rem;
+            /* Removed padding: 10px; to ensure clean centering */
+            display: flex; /* Use flexbox to center the image */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        .hero-logo {
+            width: 240px;
+            height: auto;
+            max-width: 90%;
+            object-fit: contain;
+            /* Added margin for centering within its flex container (icon-container) */
+            margin: 0 auto;
+        }
+
+        .hero-section h1 {
+            margin: 0.25rem 0 0.75rem;
+            font-size: 1.75rem;
+            color: #2c2e2f;
+        }
+
+        .hero-section p {
+            margin: 0 0 1rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Form Content - for input fields and toggles */
+        .form-content-area { /* Renamed for clarity, holds all input groups */
+            width: 100%;
+            max-width: 500px; /* Limit input area width for better form appearance */
+            padding: 0;
+            text-align: left; /* Align labels/inputs to the left within this area */
+            flex-grow: 1; /* Allow this section to grow and take available space */
+            display: flex; /* Make it a flex container */
+            flex-direction: column; /* Stack its children vertically */
+            align-items: center; /* Center fields horizontally if they don't fill max-width */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            width: 100%; /* Ensure form-group takes full width of form-content-area */
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            color: #2c2e2f;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .static-email-container {
+            background: #f3f4f6;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1.5rem;
+            width: 100%; /* Ensure it takes full width */
+        }
+
+        .static-email {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            text-align: center;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer for the send button */
+        .form-footer { /* Renamed to avoid conflict with global footer */
+            margin-top: 2rem; /* Space from content above */
+            text-align: center;
+            width: 100%; /* Ensure it spans the width */
+            max-width: 500px; /* Align with form content area */
+        }
+
+        .send-button {
+            width: 100%;
+            padding: 12px;
+            background: #c1983a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .send-button:hover {
+            opacity: 0.9;
+        }
+
+        .send-button:disabled {
+            background: #93d87a;
+            cursor: not-allowed;
+        }
+
+        /* Global footer for social media and copyright */
+        .global-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: rgba(90, 90, 90, 0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            padding-bottom: 20px;
+            margin-top: 30px; /* Space from the large white box */
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.2rem;
+            color: rgba(90, 90, 90, 0.6);
+        }
+
+        .social-icons a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+    .social-icons a:hover {
+        color: rgba(90, 90, 90, 1);
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-container {
+        margin: 1.5rem 0 0.5rem;
+        width: 100%; /* Ensure toggle container takes full width */
+    }
+
+    .toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 24px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #cbd5e1;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    input:checked + .toggle-slider {
+        background-color: #c1983a;
+    }
+
+    input:checked + .toggle-slider:before {
+        transform: translateX(24px);
+    }
+    .send-button:hover {
+            background-color: #088d18e8; /* Darker shade on hover */
+        }
+
+    .toggle-label {
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    /* Sender Info Fields */
+    .sender-info {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, opacity 0.2s ease;
+        opacity: 0;
+        margin-top: 0;
+        width: 100%; /* Ensure sender info fields take full width */
+    }
+
+    .sender-info.visible {
+        max-height: 300px; /* Adjust based on content height */
+        opacity: 1;
+        margin-top: 1rem;
+    }
+
+    .sender-info .form-group {
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+        .message-form {
+            padding: 1.5rem;
+            min-height: 400px;
+            max-width: 90%; /* Adjust width on smaller screens */
+            margin-bottom: 20px;
+        }
+        .hero-logo {
+            width: 180px;
+        }
+        .hero-section h1 {
+            font-size: 1.5rem;
+        }
+        .hero-section p {
+            font-size: 0.85rem;
+        }
+        .form-content-area, .form-footer {
+            max-width: 400px; /* Constrain form elements for better readability */
+        }
+        .form-input, .form-textarea {
+            font-size: 0.9rem;
+            padding: 0.6rem;
+        }
+        .static-email, .input-label, .word-count, .toggle-label {
+            font-size: 0.8rem;
+        }
+        .send-button {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+        .global-footer {
+            margin-top: 20px;
+            padding-bottom: 10px;
+        }
+        .social-icons {
+            font-size: 1rem;
+            gap: 10px;
+        }
+        .copyright-text {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 5px;
+        }
+        .message-form {
+            padding: 1rem;
+            min-height: 350px;
+            border-radius: 1rem;
+            margin-bottom: 15px;
+        }
+        .hero-logo {
+            width: 80px;
+        }
+        .hero-section h1 {
+            font-size: 1.4rem;
+        }
+        .hero-section p {
+            font-size: 0.8rem;
+        }
+        .form-content-area, .form-footer {
+            max-width: 300px; /* Further constrain for small phones */
+        }
+        .form-input, .form-textarea {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+        .static-email, .input-label, .word-count, .toggle-label {
+            font-size: 0.75rem;
+        }
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+        }
+        .toggle-slider:before {
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            transform: translateX(20px); /* Adjust for smaller slider */
+        }
+        .send-button {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+        }
+        .global-footer {
+            margin-top: 15px;
+            padding-bottom: 5px;
+        }
+        .social-icons {
+            font-size: 0.9rem;
+            gap: 8px;
+        }
+        .copyright-text {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+</head>
+<body>
+    <form id="messageForm" class="message-form">
+        <div class="hero-section">
+            <div class="icon-container">
+                <img src="image copy/BLINDMAILS__4.png" alt="BLINDMAILS Logo" class="hero-logo" onerror="this.onerror=null;this.src='https://placehold.co/120x100/cccccc/000000?text=Logo+Error';">
+            </div>
+            <p>Here you can send a email From LOVE@blindmails.com, to hide UR identity, to share UR L.O.V.E.</p>
+            <p>YOUR STORY TELLS WHO UR, WE DON'T TELL WHO UR</p>
+            <p>>>>share ur L.O.V.E, under radar</p>
+        </div>
+        <div class="form-content-area">
+            <div class="static-email-container">
+                <p class="static-email">From: LOVE@blindmails.com</p>
+            </div>
+            <div>
+                <p class="static-email text-center">TO:</p>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label" for="name">Recipient Name*</label>
+                <input type="text" id="name" required class="form-input" placeholder="Enter recipient's name">
+            </div>
+
+            <div class="form-group">
+                <label class="input-label" for="email">Recipient Email*</label>
+                <input type="email" id="email" required class="form-input" placeholder="Enter recipient's email">
+            </div>
+
+            <div class="form-group">
+                <label class="input-label" for="subject">Email Subject*</label>
+                <input type="text" id="subject" required class="form-input" placeholder="Enter your subject line">
+            </div>
+
+            <div class="form-group">
+                <label class="input-label" for="message">Your Message*</label>
+                <textarea id="message" rows="15" required class="form-textarea" placeholder="Write your message here..."></textarea> <!-- Increased rows to 15 -->
+                <p class="word-count" id="wordCount">Word count: 0</p>
+            </div>
+
+            <div class="toggle-container">
+                <div class="toggle-wrapper">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="senderToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">CONNECT WITH UR L.O.V.E</span>
+                </div>
+                <div class="sender-info" id="senderInfo">
+                    <div class="form-group">
+                        <label class="input-label" for="senderName">Your Name*</label>
+                        <input type="text" id="senderName" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="input-label" for="senderEmail">Your Email*</label>
+                        <input type="email" id="senderEmail" class="form-input" placeholder="Enter your email">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <button type="submit" class="send-button">
+                Send
+            </button>
+        </div>
+    </form>
+
+    <!-- Global Footer for Social Media and Copyright -->
+    <footer class="global-footer">
+        <div class="social-icons">
+            <a href="https://www.instagram.com/blindmails/" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.linkedin.com/" target="_blank" aria-label="linkedin">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://x.com/loftyads" target="_blank" aria-label="Twitter (X)">
+                <i class="fab fa-x-twitter"></i>
+            </a>
+        </div>
+        <div class="footer-link-group">
+                <a href="#" class="footer-link">Contact: info@blindmails.com</a>
+            </div>
+        
+        <div class="copyright-text">
+            &copy; 2025 Blindmails.com. All rights reserved
+        </div>
+        <div class="footer-link-group">
+                <a href="http://127.0.0.1:5500/langding%20page/tandc.html" class="footer-link">Terms & Conditions</a>
+            </div>
+    </footer>
+
+
+    <script>
+        // JavaScript for word count and sender info toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageTextarea = document.getElementById('message');
+            const wordCountDisplay = document.getElementById('wordCount');
+            const senderToggle = document.getElementById('senderToggle');
+            const senderInfo = document.getElementById('senderInfo');
+            const senderNameInput = document.getElementById('senderName');
+            const senderEmailInput = document.getElementById('senderEmail');
+            // const messageForm = document.getElementById('messageForm'); // Not needed for fetch directly
+
+            // Function to update word count
+            function updateWordCount() {
+                const text = messageTextarea.value.trim();
+                const words = text === '' ? 0 : text.split(/\s+/).length;
+                wordCountDisplay.textContent = `Word count: ${words}`;
+            }
+
+            // Function to handle sender info toggle
+            function toggleSenderInfo() {
+                if (senderToggle.checked) {
+                    senderInfo.classList.add('visible');
+                    // Make fields required when visible
+                    senderNameInput.setAttribute('required', 'required');
+                    senderEmailInput.setAttribute('required', 'required');
+                } else {
+                    senderInfo.classList.remove('visible');
+                    // Remove required attribute when hidden
+                    senderNameInput.removeAttribute('required');
+                    senderEmailInput.removeAttribute('required');
+                    // Clear values when hiding to prevent accidental submission of hidden data
+                    senderNameInput.value = '';
+                    senderEmailInput.value = '';
+                }
+            }
+
+            // Event Listeners
+            messageTextarea.addEventListener('input', updateWordCount);
+            senderToggle.addEventListener('change', toggleSenderInfo);
+
+            // Initial calls to set up UI state
+            updateWordCount();
+            toggleSenderInfo();
+        });
+
+        // Function to submit the form via Fetch API
+        async function submitForm() {
+            const form = document.getElementById('messageForm');
+            // Check HTML5 form validity
+            if (!form.checkValidity()) {
+                form.reportValidity(); // Shows browser's validation messages
+                return;
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Manually set send_anonymous based on checkbox state
+            data['send_anonymous'] = !document.getElementById('senderToggle').checked;
+
+            // If not anonymous, and sender fields are empty, return for validation
+            if (!data['send_anonymous'] && (data['sender_name'] === '' || data['sender_email'] === '')) {
+                // This scenario should ideally be caught by form.checkValidity(),
+                // but good to have a fallback if custom validation is needed.
+                alert('Please fill in your name and email to connect with your LOVE.');
+                return;
+            }
+
+
+            // Remove sender_name and sender_email if sending anonymously
+            if (data['send_anonymous']) {
+                delete data['sender_name'];
+                delete data['sender_email'];
+            }
+            
+            console.log('Sending data:', data); // For debugging
+
+            try {
+                const response = await fetch('process_form.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // Indicate JSON payload
+                    },
+                    body: JSON.stringify(data) // Send data as JSON
+                });
+
+                const result = await response.json(); // Expecting JSON response from PHP
+
+                if (response.ok) { // Check if HTTP status is 2xx
+                    if (result.success) {
+                        alert('Message sent successfully!');
+                        form.reset(); // Clear form fields on success
+                        document.getElementById('senderInfo').classList.remove('visible'); // Hide sender fields
+                        document.getElementById('senderToggle').checked = false; // Reset toggle
+                        document.getElementById('wordCount').textContent = 'Word count: 0'; // Reset word count
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                } else {
+                    // Handle HTTP errors (e.g., 500 Internal Server Error)
+                    alert('Server error: ' + result.message || 'Something went wrong on the server.');
+                    console.error('Server response error:', result);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Failed to send message. Please try again later.');
+            }
+        }
+    </script>
+</body>
+</html>
